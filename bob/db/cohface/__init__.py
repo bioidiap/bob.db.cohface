@@ -10,13 +10,15 @@ from pkg_resources import resource_filename
 
 class Database(object):
 
+
   def __init__(self):
-    from .driver import Interface
+    from .driver import Interface, DATABASE_LOCATION
     self.info = Interface()
 
-    with open(LOCATION) as f:
-      reader = csv.DictReader(f)
-      self.metadata = [row for row in reader]
+    self.metadata = []
+    for path, dirs, files in os.walk(DATABASE_LOCATION):
+      if 'data.hdf5' in files: #object directory
+        self.metadata.append(os.path.join(path, 'data'))
 
 
   def objects(self):
@@ -26,4 +28,4 @@ class Database(object):
     Returns: A list of :py:class:`.File` objects.
     """
 
-    return [File(**k) for k in self.metadata]
+    return [File(*k) for k in self.metadata]

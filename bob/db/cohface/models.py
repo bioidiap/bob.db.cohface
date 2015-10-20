@@ -24,14 +24,12 @@ class File(object):
 
   Parameters:
 
-    basedir (path): The base directory for the data
     stem (str): The stem of the files for a particular session
 
   """
 
-  def __init__(self, basedir, stem):
+  def __init__(self, stem):
 
-    self.basedir = basedir
     self.stem = bdf
 
 
@@ -62,9 +60,9 @@ class File(object):
 
     return os.path.join(
             directory or '',
-            self.basedir,
             self.stem + (extension or self.default_extension()),
             )
+
 
   def load_video(self, directory):
     """Loads the colored video file associated to this object
@@ -76,7 +74,7 @@ class File(object):
 
     """
 
-    path = os.path.join(directory, self.basedir, self.video_stem + '.m4v')
+    path = os.path.join(directory, self.video_stem + '.m4v')
     return bob.io.video.reader(path)
 
 
@@ -182,6 +180,54 @@ class File(object):
       return f.get('drmf_landmarks66')
 
     return None
+
+
+  def load_hdf5(self, directory):
+    """Loads the hdf5 file containing the sensor data
+
+
+    Parameters:
+
+    directory (str): A directory name that will be prefixed to the returned
+      result.
+
+
+    Returns:
+
+      bob.io.base.HDF5File
+
+    """
+
+    path = os.path.join(directory, self.video_stem + '.hdf5')
+    return bob.io.base.HDF5File(path)
+
+
+
+  def metadata(self, directory):
+    """Returns a dictionary with metadata about this session:
+
+
+    Parameters:
+
+    directory (str): A directory name that will be prefixed to the returned
+      result.
+
+
+    Returns:
+
+    dict: Containing the following fields
+
+      * birth-date (format: %d.%m.%Y)
+      * client-id (format: %d)
+      * illumination (str: lamp | natural)
+      * sample-rate-hz (int: 256, always)
+      * scale (str: "uV")
+      * session (format: %d)
+
+    These values are extracted from the HDF5 attributes
+    """
+
+    return load_hdf5(directory).get_attributes()
 
 
   def save(self, data, directory=None, extension='.hdf5'):
