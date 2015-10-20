@@ -205,8 +205,7 @@ class Interface(BaseInterface):
     return 'cohface'
 
   def files(self):
-    from . import LOCATION
-    return [LOCATION]
+    return []
 
   def version(self):
     import pkg_resources
@@ -221,10 +220,6 @@ class Interface(BaseInterface):
     from . import __doc__ as docs
 
     subparsers = self.setup_parser(parser, "COHFACE dataset", docs)
-
-    # get the "create" action from a submodule
-    from .create import add_command as create_command
-    create_command(subparsers)
 
     from argparse import SUPPRESS
 

@@ -54,23 +54,21 @@ class CohfaceTest(unittest.TestCase):
 
 
   def test01_objects(self):
-    self.assertEqual(len(self.db.objects()), 3490)
+    self.assertEqual(len(self.db.objects()), 164)
 
 
   @db_available
-  def test02_can_read_bdf(self):
-
-    from .utils import bdf_load_signal
+  def test02_can_read_hdf5(self):
 
     for obj in self.db.objects()[:3]:
 
-      path = obj.make_path(DATABASE_LOCATION, '.bdf')
+      path = obj.make_path(DATABASE_LOCATION, '.hdf5')
       self.assertTrue(os.path.exists(path))
 
-      signal, freq = bdf_load_signal(path)
+      f = obj.load_hdf5(DATABASE_LOCATION)
+      attr = obj.metadata(DATABASE_LOCATION)
 
-      assert signal.size
-      assert freq
+      assert attr
 
       '''
       time = len(signal)/freq
@@ -82,7 +80,7 @@ class CohfaceTest(unittest.TestCase):
 
 
   @db_available
-  def test03_can_read_camera1_video(self):
+  def test03_can_read_video(self):
 
     for obj in self.db.objects()[:5]:
 
@@ -111,7 +109,7 @@ class CmdLineTest(unittest.TestCase):
     from bob.db.base.script.dbmanage import main
 
     args = [
-            'hci_tagging',
+            'cohface',
             'dumplist',
             '--self-test',
             ]
@@ -125,7 +123,7 @@ class CmdLineTest(unittest.TestCase):
     from bob.db.base.script.dbmanage import main
 
     args = [
-            'hci_tagging',
+            'cohface',
             'checkfiles',
             '--self-test',
             '--directory=%s' % DATABASE_LOCATION,
@@ -140,7 +138,7 @@ class CmdLineTest(unittest.TestCase):
     from bob.db.base.script.dbmanage import main
 
     args = [
-            'hci_tagging',
+            'cohface',
             'mkmeta',
             '--self-test',
             '--directory=%s' % DATABASE_LOCATION,

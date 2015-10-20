@@ -28,4 +28,4 @@ class Database(object):
     Returns: A list of :py:class:`.File` objects.
     """
 
-    return [File(*k) for k in self.metadata]
+    return [File(k) for k in self.metadata]

@@ -30,7 +30,7 @@ class File(object):
 
   def __init__(self, stem):
 
-    self.stem = bdf
+    self.stem = stem
 
 
   def __repr__(self):
@@ -74,7 +74,7 @@ class File(object):
 
     """
 
-    path = os.path.join(directory, self.video_stem + '.m4v')
+    path = os.path.join(directory, self.stem + '.m4v')
     return bob.io.video.reader(path)
 
 
@@ -198,7 +198,7 @@ class File(object):
 
     """
 
-    path = os.path.join(directory, self.video_stem + '.hdf5')
+    path = os.path.join(directory, self.stem + '.hdf5')
     return bob.io.base.HDF5File(path)
 
 
@@ -227,7 +227,7 @@ class File(object):
     These values are extracted from the HDF5 attributes
     """
 
-    return load_hdf5(directory).get_attributes()
+    return self.load_hdf5(directory).get_attributes()
 
 
   def save(self, data, directory=None, extension='.hdf5'):
