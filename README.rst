@@ -44,8 +44,6 @@ This package makes use of the following important external dependencies:
 
   * bob.ip.facedetect_: For automatically detecting faces using a boosted
     classifier based on LBPs
-  * mne_: For estimating the heart-rate in beats-per-minute using the
-    Pam-Tompkins algorithm
 
 
 Usage
