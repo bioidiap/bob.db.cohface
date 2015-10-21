@@ -41,7 +41,8 @@ setup(
       'bob.db.base',
       'bob.io.video',
       'bob.ip.facedetect',
-      'mne',
+      'matplotlib',
+      'peakutils',
       ],
 
     classifiers=[

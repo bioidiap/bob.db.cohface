@@ -88,8 +88,18 @@ class CohfaceTest(unittest.TestCase):
       assert video.number_of_frames
 
 
+  @db_available
+  def test04_can_estimate_heart_rate(self):
+    import matplotlib.pyplot as plt
+
+    for obj in self.db.objects()[:10]:
+
+      hr = obj.estimate_heartrate_in_bpm(DATABASE_LOCATION)
+      plt.show()
+
+
   @meta_available
-  def test04_can_read_meta(self):
+  def test05_can_read_meta(self):
 
     for obj in self.db.objects()[:3]:
 
@@ -98,6 +108,8 @@ class CohfaceTest(unittest.TestCase):
 
       hr = obj.load_heart_rate_in_bpm()
       assert hr
+
+
 
 
 

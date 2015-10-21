@@ -10,25 +10,25 @@ import numpy
 import bob.io.video
 import bob.ip.draw
 import bob.ip.facedetect
-
-from mne.preprocessing.ecg import qrs_detector
-
+from .detect_peaks import detect_peaks
 
 def estimate_average_heartrate(s, sampling_frequency):
   '''Estimates the average heart rate taking as base the input signal and its
   sampling frequency.
 
-  This method will use the Pam-Tompkins detector available the MNE package to
-  clean-up and estimate the heart-beat frequency based on the ECG sensor
-  information provided.
+  This method will use :py:func:`detect_peaks` to figure out the
+  peaks in the noisy signal defined at ``s``.
 
   Returns:
 
     float: The estimated average heart-rate in beats-per-minute
+    peaks: A 1D numpy.ndarray with the peak points
 
   '''
 
-  peaks = qrs_detector(sampling_frequency, s)
+  min_distance = 60 * sampling_frequency / 120 #BPM
+
+  peaks = detect_peaks(s, mpd=min_distance)
   instantaneous_rates = (sampling_frequency * 60) / numpy.diff(peaks)
 
   # remove instantaneous rates which are lower than 30, higher than 240
@@ -36,7 +36,7 @@ def estimate_average_heartrate(s, sampling_frequency):
   return float(numpy.nan_to_num(instantaneous_rates[selector].mean())), peaks
 
 
-def plot_signal(s, sampling_frequency, channel_name):
+def plot_signal(s, sampling_frequency):
   '''Estimates the heart rate taking as base the input signal and its sampling
   frequency, plots QRS peaks discovered on the base signal.
 
@@ -49,6 +49,7 @@ def plot_signal(s, sampling_frequency, channel_name):
     float: The estimated average heart-rate in beats-per-minute
 
   '''
+  import matplotlib.pyplot as plt
 
   avg, peaks = estimate_average_heartrate(s, sampling_frequency)
 
@@ -56,11 +57,11 @@ def plot_signal(s, sampling_frequency, channel_name):
   ax.plot(numpy.arange(0, len(s)/sampling_frequency, 1/sampling_frequency),
           s, label='Raw signal');
   xmin, xmax, ymin, ymax = plt.axis()
-  ax.vlines(peaks / sampling_frequency, ymin, ymax, colors='r', label='P-T QRS detector')
+  ax.vlines(peaks / sampling_frequency, ymin, ymax, colors='r', label='Peak Detector')
   plt.xlim(0, len(s)/sampling_frequency)
   plt.ylabel('uV')
   plt.xlabel('time (s)')
-  plt.title('Channel %s - Average heart-rate = %d bpm' % (channel_name, avg))
+  plt.title('Average heart-rate = %d bpm' % avg)
   ax.grid(True)
   ax.legend(loc='best', fancybox=True, framealpha=0.5)
 

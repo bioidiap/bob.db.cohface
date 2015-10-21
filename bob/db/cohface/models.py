@@ -136,9 +136,12 @@ class File(object):
 
     """
 
-    from .utils import estimate_average_heartrate
+    from .utils import plot_signal, estimate_average_heartrate
 
-    avg_hr, peaks = estimate_average_heartrate(signal, freq)
+    f = self.load_hdf5(directory)
+
+    avg_hr, peaks = estimate_average_heartrate(f.get('pulse'),
+        float(f.get_attribute('sample-rate-hz')))
     return avg_hr
 
 
