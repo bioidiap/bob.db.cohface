@@ -18,7 +18,8 @@ class Database(object):
     self.metadata = []
     for path, dirs, files in os.walk(DATABASE_LOCATION):
       if 'data.hdf5' in files: #object directory
-        self.metadata.append(os.path.join(path, 'data'))
+        relpath = os.path.relpath(path, DATABASE_LOCATION)
+        self.metadata.append(os.path.join(relpath, 'data'))
 
 
   def objects(self):

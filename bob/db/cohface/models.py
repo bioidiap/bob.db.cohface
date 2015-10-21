@@ -74,7 +74,7 @@ class File(object):
 
     """
 
-    path = os.path.join(directory, self.stem + '.m4v')
+    path = os.path.join(directory, self.stem + '.avi')
     return bob.io.video.reader(path)
 
 
