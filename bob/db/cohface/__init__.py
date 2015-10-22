@@ -5,20 +5,20 @@
 
 import os
 from .models import *
+from .driver import Interface, DATABASE_LOCATION
 
 from pkg_resources import resource_filename
 
 class Database(object):
 
 
-  def __init__(self):
-    from .driver import Interface, DATABASE_LOCATION
+  def __init__(self, dbdir=DATABASE_LOCATION):
     self.info = Interface()
 
     self.metadata = []
-    for path, dirs, files in os.walk(DATABASE_LOCATION):
+    for path, dirs, files in os.walk(dbdir):
       if 'data.hdf5' in files: #object directory
-        relpath = os.path.relpath(path, DATABASE_LOCATION)
+        relpath = os.path.relpath(path, dbdir)
         self.metadata.append(os.path.join(relpath, 'data'))
 
 
