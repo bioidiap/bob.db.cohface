@@ -8,6 +8,7 @@
 
 import os, sys
 import unittest
+import nose.tools
 import pkg_resources
 
 from . import Database
@@ -90,12 +91,10 @@ class CohfaceTest(unittest.TestCase):
 
   @db_available
   def test04_can_estimate_heart_rate(self):
-    import matplotlib.pyplot as plt
 
     for obj in self.db.objects()[:10]:
 
       hr = obj.estimate_heartrate_in_bpm(DATABASE_LOCATION)
-      plt.show()
 
 
   @meta_available
@@ -110,7 +109,25 @@ class CohfaceTest(unittest.TestCase):
       assert hr
 
 
+  @nose.tools.nottest
+  @db_available
+  def test06_can_plot(self):
+    import matplotlib.pyplot as plt
+    from .utils import plot_signal_rr, plot_signal_hr
 
+    for obj in self.db.objects()[:3]:
+      f = obj.load_hdf5(DATABASE_LOCATION)
+
+      plt.subplot(2,1,1)
+      avg_hr, peaks = plot_signal_hr(f.get('pulse'),
+          float(f.get_attribute('sample-rate-hz')))
+
+      plt.subplot(2,1,2)
+      avg_rr, peaks = plot_signal_rr(f.get('respiration'),
+          float(f.get_attribute('sample-rate-hz')))
+
+      plt.tight_layout()
+      plt.show()
 
 
 class CmdLineTest(unittest.TestCase):
