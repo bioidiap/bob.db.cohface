@@ -22,11 +22,51 @@ class Database(object):
         self.metadata.append(os.path.join(relpath, 'data'))
 
 
-  def objects(self):
+  def objects(self, protocol=None):
     """Returns a list of unique :py:class:`.File` objects for the specific
     query by the user.
 
     Returns: A list of :py:class:`.File` objects.
     """
+
+    if protocol in ('train_all',):
+      d = resource_filename(__name__, os.path.join('data', 'train_all.txt'))
+      with open(d, 'rt') as f: sessions = f.read().split()
+      return [File(k) for k in self.metadata if k in sessions]
+    
+    if protocol in ('train_clean')
+      d = resource_filename(__name__, os.path.join('data', 'train_clean.txt'))
+      with open(d, 'rt') as f: sessions = f.read().split()
+      return [File(k) for k in self.metadata if k in sessions]
+
+    if protocol in ('dev_clean')
+      d = resource_filename(__name__, os.path.join('data', 'dev_clean.txt'))
+      with open(d, 'rt') as f: sessions = f.read().split()
+      return [File(k) for k in self.metadata if k in sessions]
+    
+    if protocol in ('dev_all',):
+      d = resource_filename(__name__, os.path.join('data', 'dev_all.txt'))
+      with open(d, 'rt') as f: sessions = f.read().split()
+      return [File(k) for k in self.metadata if k in sessions]
+    
+    if protocol in ('traindev_clean')
+      d = resource_filename(__name__, os.path.join('data', 'traindev_clean.txt'))
+      with open(d, 'rt') as f: sessions = f.read().split()
+      return [File(k) for k in self.metadata if k in sessions]
+    
+    if protocol in ('traindev_all',):
+      d = resource_filename(__name__, os.path.join('data', 'traindev_all.txt'))
+      with open(d, 'rt') as f: sessions = f.read().split()
+      return [File(k) for k in self.metadata if k in sessions]
+    
+    if protocol in ('test_clean')
+      d = resource_filename(__name__, os.path.join('data', 'test_clean.txt'))
+      with open(d, 'rt') as f: sessions = f.read().split()
+      return [File(k) for k in self.metadata if k in sessions]
+    
+    if protocol in ('test_all',):
+      d = resource_filename(__name__, os.path.join('data', 'test_all.txt'))
+      with open(d, 'rt') as f: sessions = f.read().split()
+      return [File(k) for k in self.metadata if k in sessions]
 
     return [File(k) for k in self.metadata]
