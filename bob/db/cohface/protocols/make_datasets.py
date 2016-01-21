@@ -14,6 +14,10 @@ random.seed(5)
 # dev -> 12 subjects
 # test -> 16 subjects
 
+# sessions 0 and 1 -> spot
+# sessions 2 and 3 -> natural light
+
+
 subjects = range(1, 41)
 
 # =======================
@@ -22,27 +26,27 @@ subjects = range(1, 41)
 train = random.sample(subjects, 12)
 
 # === all conditions ===
-sessions = [0, 2]
+sessions = [0, 1, 2, 3]
 train_examples = []
 for subj in train:
   for s in sessions:
     f = str(subj) + "/" + str(s) + "/" + "data"
     train_examples.append(f)
 
-train_list_file = open("train_all.txt", "w")
+train_list_file = open("all/train.txt", "w")
 for f in train_examples:
   train_list_file.write("{0}\n".format(f))
 train_list_file.close()
 
 # === clean condition only ===
-sessions = [0]
+sessions = [0, 1]
 train_examples = []
 for subj in train:
   for s in sessions:
     f = str(subj) + "/" + str(s) + "/" + "data"
     train_examples.append(f)
 
-train_list_file = open("train_clean.txt", "w")
+train_list_file = open("clean/train.txt", "w")
 for f in train_examples:
   train_list_file.write("{0}\n".format(f))
 
@@ -56,27 +60,27 @@ for t in train:
 dev = random.sample(subjects, 12)
 
 # === all conditions ===
-sessions = [0, 2]
+sessions = [0, 1, 2, 3]
 dev_examples = []
 for subj in dev:
   for s in sessions:
     f = str(subj) + "/" + str(s) + "/" + "data"
     dev_examples.append(f)
 
-dev_list_file = open("dev_all.txt", "w")
+dev_list_file = open("all/dev.txt", "w")
 for f in dev_examples:
   dev_list_file.write("{0}\n".format(f))
 dev_list_file.close()
 
 # === clean condition only ===
-sessions = [0]
+sessions = [0, 1]
 dev_examples = []
 for subj in dev:
   for s in sessions:
     f = str(subj) + "/" + str(s) + "/" + "data"
     dev_examples.append(f)
 
-dev_list_file = open("dev_clean.txt", "w")
+dev_list_file = open("clean/dev.txt", "w")
 for f in dev_examples:
   dev_list_file.write("{0}\n".format(f))
 
@@ -84,63 +88,33 @@ for f in dev_examples:
 for d in dev:
   subjects.remove(d)
 
-# ===============================
-# === train + development set ===
-# ===============================
-train_dev = train + dev
-
-# === all conditions ===
-sessions = [0, 2]
-train_dev_examples = []
-for subj in train_dev:
-  for s in sessions:
-    f = str(subj) + "/" + str(s) + "/" + "data"
-    train_dev_examples.append(f)
-
-train_dev_list_file = open("traindev_all.txt", "w")
-for f in train_dev_examples:
-  train_dev_list_file.write("{0}\n".format(f))
-train_dev_list_file.close()
-
-# === clean condition only ===
-sessions = [0]
-train_dev_examples = []
-for subj in train_dev:
-  for s in sessions:
-    f = str(subj) + "/" + str(s) + "/" + "data"
-    train_dev_examples.append(f)
-
-train_dev_list_file = open("traindev_clean.txt", "w")
-for f in train_dev_examples:
-  train_dev_list_file.write("{0}\n".format(f))
-
 # ================
 # === test set ===
 # ================
 test = subjects
 
 # === all conditions ===
-sessions = [0, 2]
+sessions = [0, 1, 2, 3]
 test_examples = []
 for subj in test:
   for s in sessions:
     f = str(subj) + "/" + str(s) + "/" + "data"
     test_examples.append(f)
 
-test_list_file = open("test_all.txt", "w")
+test_list_file = open("all/test.txt", "w")
 for f in test_examples:
   test_list_file.write("{0}\n".format(f))
 test_list_file.close()
 
 # === clean condition only ===
-sessions = [0]
+sessions = [0, 1]
 test_examples = []
 for subj in test:
   for s in sessions:
     f = str(subj) + "/" + str(s) + "/" + "data"
     test_examples.append(f)
 
-test_list_file = open("test_clean.txt", "w")
+test_list_file = open("clean/test.txt", "w")
 for f in test_examples:
   test_list_file.write("{0}\n".format(f))
 

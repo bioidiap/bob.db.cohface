@@ -21,52 +21,65 @@ class Database(object):
         relpath = os.path.relpath(path, dbdir)
         self.metadata.append(os.path.join(relpath, 'data'))
 
-
-  def objects(self, protocol=None):
+  def objects(self, protocol='all', subset=None):
     """Returns a list of unique :py:class:`.File` objects for the specific
     query by the user.
 
+    Parameters:
+      
+      protocol (str, optional): If set, it should be either 'all' or 'clean'.
+        All, which is the default, considers all the illumination conditions 
+        whereas clean retrieves only sequences where the spot in on.
+
+      subset (str, optional): If set, it could be either 'train', 'dev' or 'test'
+        or a combination of them (i.e. a list). If not set (default), 
+        the files from all these sets are retrieved, according to the protocol.
+
     Returns: A list of :py:class:`.File` objects.
     """
+    files = []
 
-    if protocol in ('train_all',):
-      d = resource_filename(__name__, os.path.join('data', 'train_all.txt'))
-      with open(d, 'rt') as f: sessions = f.read().split()
-      return [File(k) for k in self.metadata if k in sessions]
-    
-    if protocol in ('train_clean')
-      d = resource_filename(__name__, os.path.join('data', 'train_clean.txt'))
-      with open(d, 'rt') as f: sessions = f.read().split()
-      return [File(k) for k in self.metadata if k in sessions]
+    # clean protocol -> face is illuminated with a spot
+    if protocol in ('clean'):
 
-    if protocol in ('dev_clean')
-      d = resource_filename(__name__, os.path.join('data', 'dev_clean.txt'))
-      with open(d, 'rt') as f: sessions = f.read().split()
-      return [File(k) for k in self.metadata if k in sessions]
-    
-    if protocol in ('dev_all',):
-      d = resource_filename(__name__, os.path.join('data', 'dev_all.txt'))
-      with open(d, 'rt') as f: sessions = f.read().split()
-      return [File(k) for k in self.metadata if k in sessions]
-    
-    if protocol in ('traindev_clean')
-      d = resource_filename(__name__, os.path.join('data', 'traindev_clean.txt'))
-      with open(d, 'rt') as f: sessions = f.read().split()
-      return [File(k) for k in self.metadata if k in sessions]
-    
-    if protocol in ('traindev_all',):
-      d = resource_filename(__name__, os.path.join('data', 'traindev_all.txt'))
-      with open(d, 'rt') as f: sessions = f.read().split()
-      return [File(k) for k in self.metadata if k in sessions]
-    
-    if protocol in ('test_clean')
-      d = resource_filename(__name__, os.path.join('data', 'test_clean.txt'))
-      with open(d, 'rt') as f: sessions = f.read().split()
-      return [File(k) for k in self.metadata if k in sessions]
-    
-    if protocol in ('test_all',):
-      d = resource_filename(__name__, os.path.join('data', 'test_all.txt'))
-      with open(d, 'rt') as f: sessions = f.read().split()
-      return [File(k) for k in self.metadata if k in sessions]
+      if 'None' in subset:
+        d = resource_filename(__name__, os.path.join('protocols/clean', 'all.txt'))
+        with open(d, 'rt') as f: sessions = f.read().split()
+        files += [File(k) for k in self.metadata if k in sessions]
+        return files
+      else:
+        if 'train' in subset:
+          d = resource_filename(__name__, os.path.join('protocols/clean', 'train.txt'))
+          with open(d, 'rt') as f: sessions = f.read().split()
+          files += [File(k) for k in self.metadata if k in sessions]
+        if 'dev' in subset:
+          d = resource_filename(__name__, os.path.join('protocols/clean', 'dev.txt'))
+          with open(d, 'rt') as f: sessions = f.read().split()
+          files += [File(k) for k in self.metadata if k in sessions]
+        if 'test' in subset:
+          d = resource_filename(__name__, os.path.join('protocols/clean', 'test.txt'))
+          with open(d, 'rt') as f: sessions = f.read().split()
+          files += [File(k) for k in self.metadata if k in sessions]
+        
+        return files
 
-    return [File(k) for k in self.metadata]
+    # protocol with both conditions, spot + natural illumination (default)
+    if protocol in ('all'):
+    
+      if 'None' in subset:
+        return [File(k) for k in self.metadata]
+      else:
+        if 'train' in subset:
+          d = resource_filename(__name__, os.path.join('protocols/all', 'train.txt'))
+          with open(d, 'rt') as f: sessions = f.read().split()
+          files += [File(k) for k in self.metadata if k in sessions]
+        if 'dev' in subset:
+          d = resource_filename(__name__, os.path.join('protocols/all', 'dev.txt'))
+          with open(d, 'rt') as f: sessions = f.read().split()
+          files += [File(k) for k in self.metadata if k in sessions]
+        if 'test' in subset:
+          d = resource_filename(__name__, os.path.join('protocols/all', 'test.txt'))
+          with open(d, 'rt') as f: sessions = f.read().split()
+          files += [File(k) for k in self.metadata if k in sessions]
+
+      return files
