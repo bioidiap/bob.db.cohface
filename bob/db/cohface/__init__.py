@@ -67,7 +67,10 @@ class Database(object):
     if protocol in ('all'):
     
       if 'None' in subset:
-        return [File(k) for k in self.metadata]
+        d = resource_filename(__name__, os.path.join('protocols/all', 'all.txt'))
+        with open(d, 'rt') as f: sessions = f.read().split()
+        files += [File(k) for k in self.metadata if k in sessions]
+        return files
       else:
         if 'train' in subset:
           d = resource_filename(__name__, os.path.join('protocols/all', 'train.txt'))
