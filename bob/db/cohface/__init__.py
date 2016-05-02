@@ -27,9 +27,10 @@ class Database(object):
 
     Parameters:
       
-      protocol (str, optional): If set, it should be either 'all' or 'clean'.
+      protocol (str, optional): If set, it should be either 'clean', 'natural' or 'all'.
         All, which is the default, considers all the illumination conditions 
-        whereas clean retrieves only sequences where the spot in on.
+        whereas clean retrieves only sequences where the spot in on and natural the ones
+        with daylight illumination.
 
       subset (str, optional): If set, it could be either 'train', 'dev' or 'test'
         or a combination of them (i.e. a list). If not set (default), 
@@ -62,6 +63,31 @@ class Database(object):
           files += [File(k) for k in self.metadata if k in sessions]
         
         return files
+
+    # natural protocol -> no specific illumination (daylight)
+    if protocol in ('natural'):
+
+      if 'None' in subset:
+        d = resource_filename(__name__, os.path.join('protocols/natural', 'all.txt'))
+        with open(d, 'rt') as f: sessions = f.read().split()
+        files += [File(k) for k in self.metadata if k in sessions]
+        return files
+      else:
+        if 'train' in subset:
+          d = resource_filename(__name__, os.path.join('protocols/natural', 'train.txt'))
+          with open(d, 'rt') as f: sessions = f.read().split()
+          files += [File(k) for k in self.metadata if k in sessions]
+        if 'dev' in subset:
+          d = resource_filename(__name__, os.path.join('protocols/natural', 'dev.txt'))
+          with open(d, 'rt') as f: sessions = f.read().split()
+          files += [File(k) for k in self.metadata if k in sessions]
+        if 'test' in subset:
+          d = resource_filename(__name__, os.path.join('protocols/natural', 'test.txt'))
+          with open(d, 'rt') as f: sessions = f.read().split()
+          files += [File(k) for k in self.metadata if k in sessions]
+        
+        return files
+
 
     # protocol with both conditions, spot + natural illumination (default)
     if protocol in ('all'):
