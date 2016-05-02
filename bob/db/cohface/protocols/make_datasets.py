@@ -50,6 +50,18 @@ train_list_file = open("clean/train.txt", "w")
 for f in train_examples:
   train_list_file.write("{0}\n".format(f))
 
+# === natural conditions only ===
+sessions = [2, 3]
+train_examples = []
+for subj in train:
+  for s in sessions:
+    f = str(subj) + "/" + str(s) + "/" + "data"
+    train_examples.append(f)
+
+train_list_file = open("natural/train.txt", "w")
+for f in train_examples:
+  train_list_file.write("{0}\n".format(f))
+
 # remove training subjects from the pool of subjects
 for t in train:
   subjects.remove(t)
@@ -81,6 +93,18 @@ for subj in dev:
     dev_examples.append(f)
 
 dev_list_file = open("clean/dev.txt", "w")
+for f in dev_examples:
+  dev_list_file.write("{0}\n".format(f))
+
+# === natural condition only ===
+sessions = [2, 3]
+dev_examples = []
+for subj in dev:
+  for s in sessions:
+    f = str(subj) + "/" + str(s) + "/" + "data"
+    dev_examples.append(f)
+
+dev_list_file = open("natural/dev.txt", "w")
 for f in dev_examples:
   dev_list_file.write("{0}\n".format(f))
 
@@ -118,3 +142,14 @@ test_list_file = open("clean/test.txt", "w")
 for f in test_examples:
   test_list_file.write("{0}\n".format(f))
 
+# === natural condition only ===
+sessions = [2, 3]
+test_examples = []
+for subj in test:
+  for s in sessions:
+    f = str(subj) + "/" + str(s) + "/" + "data"
+    test_examples.append(f)
+
+test_list_file = open("natural/test.txt", "w")
+for f in test_examples:
+  test_list_file.write("{0}\n".format(f))
