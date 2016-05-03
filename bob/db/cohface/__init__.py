@@ -43,7 +43,7 @@ class Database(object):
     # clean protocol -> face is illuminated with a spot
     if protocol in ('clean'):
 
-      if 'None' in subset:
+      if not subset:
         d = resource_filename(__name__, os.path.join('protocols/clean', 'all.txt'))
         with open(d, 'rt') as f: sessions = f.read().split()
         files += [File(k) for k in self.metadata if k in sessions]
@@ -67,7 +67,7 @@ class Database(object):
     # natural protocol -> no specific illumination (daylight)
     if protocol in ('natural'):
 
-      if 'None' in subset:
+      if not subset:
         d = resource_filename(__name__, os.path.join('protocols/natural', 'all.txt'))
         with open(d, 'rt') as f: sessions = f.read().split()
         files += [File(k) for k in self.metadata if k in sessions]
@@ -92,7 +92,7 @@ class Database(object):
     # protocol with both conditions, spot + natural illumination (default)
     if protocol in ('all'):
     
-      if 'None' in subset:
+      if not subset:
         d = resource_filename(__name__, os.path.join('protocols/all', 'all.txt'))
         with open(d, 'rt') as f: sessions = f.read().split()
         files += [File(k) for k in self.metadata if k in sessions]
