@@ -176,6 +176,7 @@ class File(object):
     The points are in the form (y, x), as it is standard on Bob-based packages.
     """
 
+    
     data_dir = pkg_resources.resource_filename(__name__, 'data')
     path = self.make_path(data_dir, '.hdf5')
 

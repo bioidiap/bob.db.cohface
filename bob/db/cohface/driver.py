@@ -217,7 +217,7 @@ def write_kpts_and_hr(args):
       continue
     try:
       print "Refactoring meta data for `%s'..." % obj.make_path()
-      if kpts and hr:
+      if kpts[0,0] and hr:
         outdir = os.path.dirname(output)
         if not os.path.exists(outdir): os.makedirs(outdir)
         h5 = bob.io.base.HDF5File(output, 'w')
