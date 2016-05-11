@@ -198,6 +198,42 @@ def checkfiles(args):
 
   return 0
 
+def write_kpts_and_hr(args):
+  """Refactor metadata with DMRF and HR only"""
+  from . import Database
+  db = Database()
+  
+  basedir = pkg_resources.resource_filename(__name__, 'new-data')
+
+  objects = db.objects()
+
+  for obj in objects:
+    kpts = obj.load_drmf_keypoints()
+    hr = obj.load_heart_rate_in_bpm()
+    
+    output = obj.make_path(basedir, '.hdf5')
+    if os.path.exists(output) and not args.force:
+      print "Skipping `%s' (meta file exists)" % obj.make_path()
+      continue
+    try:
+      print "Refactoring meta data for `%s'..." % obj.make_path()
+      if kpts and hr:
+        outdir = os.path.dirname(output)
+        if not os.path.exists(outdir): os.makedirs(outdir)
+        h5 = bob.io.base.HDF5File(output, 'w')
+        h5.set('drmf_landmarks66', kpts)
+        h5.set('heartrate', hr)
+        h5.set_attribute('units', 'beats-per-minute', 'heartrate')
+        h5.close()
+      else:
+        print "Skipping `%s': Missing keypoints and/or Heart-rate" % (obj.stem,)
+        print " -> Keypoints: %s" % bb
+        print " -> Heart-rate  : %s" % hr
+    except IOError as e:
+      print "Skipping `%s': %s" % (obj.stem, str(e))
+      continue
+  
+  return 0
 
 class Interface(BaseInterface):
 
@@ -258,3 +294,9 @@ class Interface(BaseInterface):
     debug_parser.add_argument('--limit', dest="limit", default=0, type=int, help="Limits the number of objects to treat (defaults to '%(default)')")
     debug_parser.add_argument('--self-test', dest="selftest", default=False, action='store_true', help=SUPPRESS)
     debug_parser.set_defaults(func=debug) #action
+
+     # add the write_kpts_and_hr command
+    meta_message = write_kpts_and_hr.__doc__
+    meta_parser = subparsers.add_parser('write-kpts-hr', help=write_kpts_and_hr.__doc__)
+    meta_parser.set_defaults(func=write_kpts_and_hr) #action
+
