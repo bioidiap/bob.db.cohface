@@ -42,7 +42,7 @@ class Database(object):
 
     # clean protocol -> face is illuminated with a spot
     if protocol in ('clean'):
-
+     
       if not subset:
         d = resource_filename(__name__, os.path.join('protocols/clean', 'all.txt'))
         with open(d, 'rt') as f: sessions = f.read().split()
