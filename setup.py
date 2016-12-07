@@ -1,16 +1,14 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
 
-from setuptools import setup, find_packages
+from setuptools import setup, dist
 dist.Distribution(dict(setup_requires=['bob.extension']))
 
 from bob.extension.utils import load_requirements, find_packages
 install_requires = load_requirements()
 
-# Define package version
-version = open("version.txt").read().rstrip()
-
 setup(
+
     name='bob.db.cohface',
     version=open("version.txt").read().rstrip(),
     description='COHFACE Database Access API for Bob',
