@@ -1,0 +1,5 @@
+setuptools
+bob.extension
+bob.db.base
+bob.io.video
+matplotlib
