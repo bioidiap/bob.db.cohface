@@ -13,18 +13,14 @@ videos.
 If you decide to use this package, please consider citing `Bob`_, as a software
 development environment and the authors of the dataset::
 
-  @article{soleymani-2012,
-    author={Soleymani, M. and Lichtenauer, J. and Pun, T. and Pantic, M.},
-    journal={Affective Computing, IEEE Transactions on},
-    title={A Multimodal Database for Affect Recognition and Implicit Tagging},
-    year={2012},
-    volume={3},
-    number={1},
-    pages={42-55},
-    doi={10.1109/T-AFFC.2011.25},
-    month=Jan,
+@inproceedings{Anjos_ACMMM_2012,
+        author = {A. Anjos AND L. El Shafey AND R. Wallace AND M. G\"unther AND C. McCool AND S. Marcel},
+        title = {Bob: a free signal processing and machine learning toolbox for researchers},
+        year = {2012},
+        month = oct,
+        booktitle = {20th ACM Conference on Multimedia Systems (ACMMM), Nara, Japan},
+        publisher = {ACM Press},
     }
-
 
 Installation
 ------------
