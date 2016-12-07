@@ -6,14 +6,13 @@
  COHFACE Database Interface for Bob
 ====================================
 
-This package contains an interface for the `COHFACE dataset`_, which is useful
+This package contains an interface for the COHFACE dataset, which is useful
 for measuring the performance of heart-rate estimation algorithms from webcam
 videos.
 
-If you decide to use this package, please consider citing `Bob`_, as a software
-development environment and the authors of the dataset::
+This package heavily depends on bob_, so if you use this package and/or its results, please cite the following publication::
 
-@inproceedings{Anjos_ACMMM_2012,
+    @inproceedings{Anjos_ACMMM_2012,
         author = {A. Anjos AND L. El Shafey AND R. Wallace AND M. G\"unther AND C. McCool AND S. Marcel},
         title = {Bob: a free signal processing and machine learning toolbox for researchers},
         year = {2012},
@@ -22,16 +21,23 @@ development environment and the authors of the dataset::
         publisher = {ACM Press},
     }
 
+    
 Installation
 ------------
 
-To install this package -- alone or together with other `Packages of Bob
-<https://github.com/idiap/bob/wiki/Packages>`_ -- please read the `Installation
-Instructions <https://github.com/idiap/bob/wiki/Installation>`_.  For Bob_ to
-be able to work properly, some dependent packages are required to be installed.
-Please make sure that you have read the `Dependencies
-<https://github.com/idiap/bob/wiki/Dependencies>`_ for your operating system.
+To install the package, git-clone it or download the zip archive, open a terminal and run:
 
+  .. code:: bash 
+     
+     $ cd bob.rppg.base
+     $ python bootstrap-buildout.py
+     $ ./bin/buildout
+
+
+For bob_ (and hence this package) to be able to work properly, some dependent packages are required to be installed.
+Please make sure that you have read the `Dependencies <https://github.com/idiap/bob/wiki/Dependencies>`_ for your operating system.
+In particular, this package requires OpenCV (version 2.4.10) to be installed. If you have a different version (i.e 
+version 3), the code might need some editing, see full documentation for details.
 
 Dependencies
 ============
