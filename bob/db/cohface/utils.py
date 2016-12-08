@@ -9,7 +9,6 @@ import os
 import numpy
 import bob.io.video
 import bob.ip.draw
-import bob.ip.facedetect
 from .detect_peaks import detect_peaks
 
 def estimate_average_heartrate(s, sampling_frequency):
