@@ -54,6 +54,7 @@ class CohfaceTest(unittest.TestCase):
     self.db = Database()
 
 
+  @db_available
   def test01_objects(self):
     self.assertEqual(len(self.db.objects()), 160)
 

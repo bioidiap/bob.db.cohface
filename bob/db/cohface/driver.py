@@ -16,7 +16,7 @@ from bob.db.base.driver import Interface as BaseInterface
 
 from . import utils
 
-DATABASE_LOCATION = '/idiap/project/cohface/ddp'
+DATABASE_LOCATION = '/idiap/project/cohface/ddpx'
 
 
 # Driver API
