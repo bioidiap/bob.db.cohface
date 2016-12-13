@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
 
+"""A very simple API to query and load data from the COHFACE database.
+"""
+
 import os
 from .models import *
 from .driver import Interface, DATABASE_LOCATION
