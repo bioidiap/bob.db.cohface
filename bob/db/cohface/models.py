@@ -143,7 +143,7 @@ class File(bob.db.base.File):
     This function loads bounding boxes for each frame of a video sequence.
     Bounding boxes are loaded from the database directory and are the ones
     provided with it. Bounding boxes generated from
-    :py:meth:`load_face_detection` (which should be exactly the same) are not
+    :py:meth:`run_face_detection` (which should be exactly the same) are not
     used by this method.
 
 
