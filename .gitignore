@@ -18,4 +18,5 @@ build
 *.egg
 src/
 logs/
-*.sql3
+bob/db/cohface/data/
+bob/db/cohface/protocols/
