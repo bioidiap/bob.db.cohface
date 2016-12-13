@@ -42,7 +42,7 @@ def dumplist(args):
 
 
 def create_meta(args):
-  """Runs the heart-rate estimation, save outputs at package"""
+  """Runs the face detection, heart-rate estimation, save outputs at package"""
 
 
   from . import Database
@@ -78,17 +78,27 @@ def create_meta(args):
       continue
     try:
       print("Creating meta data for `%s'..." % obj.make_path())
+      bb = obj.run_face_detector(args.directory, max_frames=1)[0]
       hr = obj.estimate_heartrate_in_bpm(args.directory)
-      if hr:
+      if bb and hr:
         outdir = os.path.dirname(output)
         if not os.path.exists(outdir): os.makedirs(outdir)
         h5 = bob.io.base.HDF5File(output, 'w')
+        h5.create_group('face_detector')
+        h5.cd('face_detector')
+        h5.set('topleft_x', bb.topleft.x)
+        h5.set('topleft_y', bb.topleft.y)
+        h5.set('width', bb.size.x)
+        h5.set('height', bb.size.y)
+        h5.set_attribute('quality', bb.quality)
+        h5.cd('..')
         h5.set('heartrate', hr)
         h5.set_attribute('units', 'beats-per-minute', 'heartrate')
         h5.close()
       else:
         print("Skipping `%s': Missing Heart-rate" % (obj.stem,))
         print(" -> Heart-rate  : %s" % hr)
+        print(" -> Bounding box: %s" % bb)
 
     except IOError as e:
       print("Skipping `%s': %s" % (obj.stem, str(e)))
@@ -133,6 +143,13 @@ def debug(args):
   for obj in objects:
     print("Creating debug data for `%s'..." % obj.make_path())
     try:
+
+      detections = obj.run_face_detector(args.directory)
+      # save annotated video file
+      output = obj.make_path(args.output_directory, '.avi')
+      print("Annotating video `%s'" % output)
+      utils.annotate_video(obj.load_video(args.directory), detections, output)
+
       print("Annotating heart-rate `%s'" % output)
       output = obj.make_path(args.output_directory, '.pdf')
       utils.explain_heartrate(obj, args.directory, output)
