@@ -43,7 +43,7 @@ class Database(object):
 
     Returns:
 
-      list: A list of :py:class:`.File` objects.
+      list: A list of :py:class:`File` objects.
 
     """
     files = []

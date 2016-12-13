@@ -174,7 +174,7 @@ class File(bob.db.base.File):
 
 
   def estimate_heartrate_in_bpm(self, directory):
-    """Estimates the person's heart rate using the ECG sensor data
+    """Estimates the person's heart rate using the contact PPG sensor data
 
     Parameters:
 
