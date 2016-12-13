@@ -1,87 +1,49 @@
 .. vim: set fileencoding=utf-8 :
-.. Andre Anjos <andre.anjos@idiap.ch>
-.. Tue 20 Oct 2015 15:52:00 CEST
+.. Wed  7 Dec 16:34:35 CET 2016
 
-====================================
- COHFACE Database Interface for Bob
-====================================
+.. image:: http://img.shields.io/badge/docs-stable-yellow.png
+   :target: http://pythonhosted.org/bob.db.cohface/index.html
+.. image:: http://img.shields.io/badge/docs-latest-orange.png
+   :target: https://www.idiap.ch/software/bob/docs/latest/bob/bob.db.cohface/master/index.html
+.. image:: https://gitlab.idiap.ch/bob/bob.db.cohface/badges/master/build.svg
+   :target: https://gitlab.idiap.ch/bob/bob.db.cohface/commits/master
+.. image:: https://img.shields.io/badge/gitlab-project-0000c0.svg
+   :target: https://gitlab.idiap.ch/bob/bob.db.cohface
+.. image:: http://img.shields.io/pypi/v/bob.db.cohface.png
+   :target: https://pypi.python.org/pypi/bob.db.cohface
+.. image:: http://img.shields.io/pypi/dm/bob.db.cohface.png
+   :target: https://pypi.python.org/pypi/bob.db.cohface
 
-This package contains an interface for the COHFACE dataset, which is useful
-for measuring the performance of heart-rate estimation algorithms from webcam
-videos.
 
-This package heavily depends on bob_, so if you use this package and/or its results, please cite the following publication::
+=====================================
+ COHFACE Database Access API for Bob
+=====================================
 
-    @inproceedings{Anjos_ACMMM_2012,
-        author = {A. Anjos AND L. El Shafey AND R. Wallace AND M. G\"unther AND C. McCool AND S. Marcel},
-        title = {Bob: a free signal processing and machine learning toolbox for researchers},
-        year = {2012},
-        month = oct,
-        booktitle = {20th ACM Conference on Multimedia Systems (ACMMM), Nara, Japan},
-        publisher = {ACM Press},
-    }
+This package is part of the signal-processing and machine learning toolbox
+Bob_. It contains an interface for the evaluation protocols of the `COHFACE
+Database`_. Notice this package does not contain the raw data files from this
+dataset, which need to be obtained through the link above.
 
-    
+
 Installation
 ------------
 
-To install the package, git-clone it or download the zip archive, open a terminal and run:
+Follow our `installation`_ instructions. Then, using the Python interpreter
+provided by the distribution, bootstrap and buildout this package::
 
-  .. code:: bash 
-     
-     $ cd bob.rppg.base
-     $ python bootstrap-buildout.py
-     $ ./bin/buildout
+  $ python bootstrap-buildout.py
+  $ ./bin/buildout
 
 
-For bob_ (and hence this package) to be able to work properly, some dependent packages are required to be installed.
-Please make sure that you have read the `Dependencies <https://github.com/idiap/bob/wiki/Dependencies>`_ for your operating system.
-In particular, this package requires OpenCV (version 2.4.10) to be installed. If you have a different version (i.e 
-version 3), the code might need some editing, see full documentation for details.
+Contact
+-------
 
-Dependencies
-============
-
-This package makes use of the following important external dependencies:
-
-  * bob.ip.facedetect_: For automatically detecting faces using a boosted
-    classifier based on LBPs
+For questions or reporting issues to this software package, contact our
+development `mailing list`_.
 
 
-Usage
------
-
-You can read videos and sensor information out of the database using the
-provided API.
-
-
-Annotations
-===========
-
-This package can, optionally, *automatically* annotate the following key
-aspects of the Mahnob HCI-Tagging dataset:
-
-  * Average heart-rate in beats-per-minute (BPM), using the Pam-Tompkins
-    algorithm as implemented by `mne`_.
-  * Face bounding boxes, as detected by the default detector on
-    `bob.ip.facedetect`_.
-
-
-The annotation procedure can be launched with the following command::
-
-  $ ./bin/bob_dbmanage.py cohface mkmeta
-
-
-Each video, which is composed of a significant number of frames (hundreds),
-takes about 5 minutes to get completely processed. If are at Idiap, you can
-launch the job on the SGE queue using the following command-line::
-
-  $ ./bin/jman sub -q q1d --io-big -t 3490 `pwd`/bin/bob_dbmanage.py cohface mkmeta
-
-
-.. Your references go here
-
+.. Place your references here:
 .. _bob: https://www.idiap.ch/software/bob
-.. _mahnob hci-tagging dataset: http://mahnob-db.eu/hci-tagging/
-.. _bob.ip.facedetect: https://pypi.python.org/pypi/bob.ip.facedetect
-.. _mne: https://pypi.python.org/pypi/mne
+.. _installation: https://www.idiap.ch/software/bob/install
+.. _mailing list: https://www.idiap.ch/software/bob/discuss
+.. _cohface database: https://www.idiap.ch/dataset/cohface

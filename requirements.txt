@@ -1,0 +1,7 @@
+setuptools
+bob.extension
+bob.db.base
+bob.io.video
+bob.ip.draw
+bob.ip.facedetect
+matplotlib
