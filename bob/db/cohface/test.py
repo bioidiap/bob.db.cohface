@@ -55,7 +55,7 @@ class CohfaceTest(unittest.TestCase):
 
 
   def test01_objects(self):
-    self.assertEqual(len(self.db.objects()), 164)
+    self.assertEqual(len(self.db.objects()), 160)
 
 
   @db_available
@@ -102,7 +102,7 @@ class CohfaceTest(unittest.TestCase):
 
     for obj in self.db.objects()[:3]:
 
-      detection = obj.load_face_detection()
+      detection = obj.load_face_detection(DATABASE_LOCATION)
       assert detection
 
       hr = obj.load_heart_rate_in_bpm()

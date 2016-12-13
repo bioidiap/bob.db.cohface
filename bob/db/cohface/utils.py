@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # encoding: utf-8
-# Andre Anjos <andre.anjos@idiap.ch>
-# Thu  1 Oct 11:00:44 CEST 2015
 
 '''Utilities for Remote Photo-Plethysmography Benchmarking'''
 
@@ -10,6 +8,7 @@ import numpy
 import bob.io.video
 import bob.ip.draw
 from .detect_peaks import detect_peaks
+
 
 def estimate_average_heartrate(s, sampling_frequency):
   '''Estimates the average heart rate taking as base the input signal and its
@@ -21,7 +20,7 @@ def estimate_average_heartrate(s, sampling_frequency):
   Returns:
 
     float: The estimated average heart-rate in beats-per-minute
-    peaks: A 1D numpy.ndarray with the peak points
+    numpy.ndarray: A 1D numpy.ndarray with the peak points
 
   '''
 
@@ -77,7 +76,7 @@ def estimate_average_resprate(s, sampling_frequency):
   Returns:
 
     float: The estimated average respiratory rate in breaths per minute
-    peaks: A 1D numpy.ndarray with the peak points
+    numpy.ndarray: A 1D numpy.ndarray with the peak points
 
   '''
 

@@ -7,27 +7,30 @@ import os
 import collections
 import pkg_resources
 
+import bob.db.base
 import bob.io.base
+import bob.ip.facedetect
 
 from . import utils
 
-class File(object):
+
+class File(bob.db.base.File):
   """ Generic file container for COHFACE files
 
 
   Parameters:
 
-    stem (str): The stem of the files for a particular session
+    path (str): The stem of the files for a particular session
 
   """
 
-  def __init__(self, stem):
+  def __init__(self, path):
 
-    self.stem = stem
+    self.path = path
 
 
   def __repr__(self):
-    return "File('%s')" % self.stem
+    return "File('%s')" % self.path
 
 
   def default_extension(self):
@@ -37,38 +40,93 @@ class File(object):
   def make_path(self, directory=None, extension=None):
     """Wraps this files' filename so that a complete path is formed
 
-    Keyword parameters:
+    Parameters:
 
-    directory
-      An optional directory name that will be prefixed to the returned result.
+      directory (str): An optional directory name that will be prefixed to the
+        returned result.
 
-    extension
-      An optional extension that will be suffixed to the returned filename. The
-      extension normally includes the leading ``.`` character as in ``.png`` or
-      ``.bmp``. If not specified the default extension for the original file in
-      the database will be used
+      extension (str): An optional extension that will be suffixed to the
+        returned filename. The extension normally includes the leading ``.``
+        character as in ``.png`` or ``.bmp``. If not specified the default
+        extension for the original file in the database will be used.
 
     Returns a string containing the newly generated file path.
     """
 
     return os.path.join(
             directory or '',
-            self.stem + (extension or self.default_extension()),
+            self.path + (extension or self.default_extension()),
             )
+
+
+  def load(self, directory=None, extension='.avi'):
+    """Loads the video for this file entry
+
+
+    Parameters:
+
+      directory (str): The path to the root of the database installation.  This
+        is the path leading to directories named ``D`` where ``D``'s
+        correspond to digits.
+
+
+    Returns:
+
+      numpy.ndarray: A 4D array of 8-bit unsigned integers corresponding to the
+      input video for this file in (frame,channel,y,x) notation (Bob-style).
+
+    """
+
+    return bob.io.base.load(self.make_path(directory, extension))
 
 
   def load_video(self, directory):
     """Loads the colored video file associated to this object
 
-    Keyword parameters:
+    Parameters:
 
-    directory
-      A directory name that will be prefixed to the returned result.
+      directory (str): A directory name that will be prefixed to the returned
+        result.
+
+
+    Returns
+
+      bob.io.video.reader: Preloaded and ready to be iterated by your code.
 
     """
 
-    path = os.path.join(directory, self.stem + '.avi')
+    path = os.path.join(directory, self.path + '.avi')
     return bob.io.video.reader(path)
+
+
+  def load_face_detection(self, directory):
+    """Load bounding boxes for this file
+
+    This function loads bounding boxes for each frame of a video sequence.
+
+    Parameters:
+
+      directory (str): A directory name that will be prefixed to the returned
+        result.
+
+    Returns:
+
+      dict: A dictionary where the key is the frame number and the values are
+      instances of :py:class:`bob.ip.facedetect.BoundingBox`.
+
+    """
+
+    retval = {}
+
+    path = os.path.join(directory, 'bounding-boxes', self.path + '.face')
+
+    with open(path, 'rt') as f:
+      for row in f:
+        if not row.strip(): continue
+        p = row.split()
+        # top left (y, x), size (height, width)
+        retval[int(p[0])] = bob.ip.facedetect.BoundingBox((float(p[2]), float(p[1])), (float(p[4]), float(p[3])))
+    return retval
 
 
   def estimate_heartrate_in_bpm(self, directory):
@@ -86,7 +144,6 @@ class File(object):
 
     f = self.load_hdf5(directory)
 
-    #avg_hr, peaks = estimate_average_heartrate(f.get('pulse'),
     avg_hr, peaks = estimate_average_heartrate(f.get('pulse'),
         float(f.get_attribute('sample-rate-hz')))
     return avg_hr
@@ -122,7 +179,7 @@ class File(object):
     The points are in the form (y, x), as it is standard on Bob-based packages.
     """
 
-    
+
     data_dir = pkg_resources.resource_filename(__name__, 'data')
     path = self.make_path(data_dir, '.hdf5')
 
@@ -149,7 +206,7 @@ class File(object):
 
     """
 
-    path = os.path.join(directory, self.stem + '.hdf5')
+    path = os.path.join(directory, self.path + '.hdf5')
     return bob.io.base.HDF5File(path)
 
 
@@ -166,16 +223,17 @@ class File(object):
 
     Returns:
 
-    dict: Containing the following fields
+      dict: Containing the following fields
 
-      * birth-date (format: %d.%m.%Y)
-      * client-id (format: %d)
-      * illumination (str: lamp | natural)
-      * sample-rate-hz (int: 256, always)
-      * scale (str: "uV")
-      * session (format: %d)
+        * ``birth-date``: format: `%d.%m.%Y`
+        * ``client-id``: integer
+        * ``illumination``: str (``lamp`` | ``natural``)
+        * ``sample-rate-hz``: integer - always 256 (Hz)
+        * ``scale``: str - always ``uV``
+        * ``session``: integer
 
     These values are extracted from the HDF5 attributes
+
     """
 
     return self.load_hdf5(directory).get_attributes()
@@ -185,9 +243,9 @@ class File(object):
     """Saves the input data at the specified location and using the given
     extension.
 
-    Keyword parameters:
+    Parameters:
 
-    data
+    data (
       The data blob to be saved (normally a :py:class:`numpy.ndarray`).
 
     directory

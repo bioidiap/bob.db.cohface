@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
-# Andre Anjos <andre.anjos@idiap.ch>
-# Wed 30 Sep 2015 12:14:50 CEST
 
 import os
 from .models import *
@@ -21,28 +19,35 @@ class Database(object):
         relpath = os.path.relpath(path, dbdir)
         self.metadata.append(os.path.join(relpath, 'data'))
 
+
   def objects(self, protocol='all', subset=None):
     """Returns a list of unique :py:class:`.File` objects for the specific
     query by the user.
 
+
     Parameters:
-      
-      protocol (str, optional): If set, it should be either 'clean', 'natural' or 'all'.
-        All, which is the default, considers all the illumination conditions 
-        whereas clean retrieves only sequences where the spot in on and natural the ones
-        with daylight illumination.
 
-      subset (str, optional): If set, it could be either 'train', 'dev' or 'test'
-        or a combination of them (i.e. a list). If not set (default), 
-        the files from all these sets are retrieved, according to the protocol.
+      protocol (:py:class:`str`, optional): If set, it should be either
+        ``clean``, ``natural`` or ``all``.  All, which is the default,
+        considers all the illumination conditions whereas clean retrieves only
+        sequences where the spot in on and natural the ones with daylight
+        illumination.
 
-    Returns: A list of :py:class:`.File` objects.
+      subset (:py:class:`str`, optional): If set, it could be either ``train``,
+        ``dev`` or ``test`` or a combination of them (i.e. a list). If not set
+        (default), the files from all these sets are retrieved, according to
+        the protocol.
+
+    Returns:
+
+      list: A list of :py:class:`.File` objects.
+
     """
     files = []
 
     # clean protocol -> face is illuminated with a spot
     if protocol in ('clean'):
-     
+
       if not subset:
         d = resource_filename(__name__, os.path.join('protocols/clean', 'all.txt'))
         with open(d, 'rt') as f: sessions = f.read().split()
@@ -61,7 +66,7 @@ class Database(object):
           d = resource_filename(__name__, os.path.join('protocols/clean', 'test.txt'))
           with open(d, 'rt') as f: sessions = f.read().split()
           files += [File(k) for k in self.metadata if k in sessions]
-        
+
         return files
 
     # natural protocol -> no specific illumination (daylight)
@@ -85,13 +90,13 @@ class Database(object):
           d = resource_filename(__name__, os.path.join('protocols/natural', 'test.txt'))
           with open(d, 'rt') as f: sessions = f.read().split()
           files += [File(k) for k in self.metadata if k in sessions]
-        
+
         return files
 
 
     # protocol with both conditions, spot + natural illumination (default)
     if protocol in ('all'):
-    
+
       if not subset:
         d = resource_filename(__name__, os.path.join('protocols/all', 'all.txt'))
         with open(d, 'rt') as f: sessions = f.read().split()
@@ -112,3 +117,24 @@ class Database(object):
           files += [File(k) for k in self.metadata if k in sessions]
 
       return files
+
+
+# gets sphinx autodoc done right - don't remove it
+def __appropriate__(*args):
+  """Says object was actually declared here, an not on the import module.
+
+  Parameters:
+
+    *args: An iterable of objects to modify
+
+  Resolves `Sphinx referencing issues
+  <https://github.com/sphinx-doc/sphinx/issues/3048>`
+  """
+
+  for obj in args: obj.__module__ = __name__
+
+__appropriate__(
+    File,
+    )
+
+__all__ = [_ for _ in dir() if not _.startswith('_')]

@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
-# Andre Anjos <andre.anjos@idiap.ch>
-# Wed 30 Sep 2015 12:08:31 CEST
 
 """Commands
 """
@@ -18,7 +16,7 @@ from bob.db.base.driver import Interface as BaseInterface
 
 from . import utils
 
-DATABASE_LOCATION = '/idiap/project/cohface/data-collection/merged'
+DATABASE_LOCATION = '/idiap/project/cohface/ddp'
 
 
 # Driver API
@@ -57,15 +55,15 @@ def create_meta(args):
     objects = objects[:args.limit]
 
   if args.grid_count:
-    print len(objects)
+    print(len(objects))
     sys.exit(0)
 
   # if we are on a grid environment, just find what I have to process.
   if os.environ.has_key('SGE_TASK_ID'):
     pos = int(os.environ['SGE_TASK_ID']) - 1
     if pos >= len(objects):
-      raise RuntimeError, "Grid request for job %d on a setup with %d jobs" % \
-          (pos, len(objects))
+      raise RuntimeError("Grid request for job %d on a setup with %d jobs" % \
+          (pos, len(objects)))
     objects = [objects[pos]]
 
   if args.selftest:
@@ -76,10 +74,10 @@ def create_meta(args):
   for obj in objects:
     output = obj.make_path(basedir, '.hdf5')
     if os.path.exists(output) and not args.force:
-      print "Skipping `%s' (meta file exists)" % obj.make_path()
+      print("Skipping `%s' (meta file exists)" % obj.make_path())
       continue
     try:
-      print "Creating meta data for `%s'..." % obj.make_path()
+      print("Creating meta data for `%s'..." % obj.make_path())
       hr = obj.estimate_heartrate_in_bpm(args.directory)
       if hr:
         outdir = os.path.dirname(output)
@@ -89,11 +87,11 @@ def create_meta(args):
         h5.set_attribute('units', 'beats-per-minute', 'heartrate')
         h5.close()
       else:
-        print "Skipping `%s': Missing Heart-rate" % (obj.stem,)
-        print " -> Heart-rate  : %s" % hr
+        print("Skipping `%s': Missing Heart-rate" % (obj.stem,))
+        print(" -> Heart-rate  : %s" % hr)
 
     except IOError as e:
-      print "Skipping `%s': %s" % (obj.stem, str(e))
+      print("Skipping `%s': %s" % (obj.stem, str(e)))
       continue
 
     finally:
@@ -119,28 +117,28 @@ def debug(args):
     objects = objects[:args.limit]
 
   if args.grid_count:
-    print len(objects)
+    print(len(objects))
     sys.exit(0)
 
   # if we are on a grid environment, just find what I have to process.
   if os.environ.has_key('SGE_TASK_ID'):
     pos = int(os.environ['SGE_TASK_ID']) - 1
     if pos >= len(objects):
-      raise RuntimeError, "Grid request for job %d on a setup with %d jobs" % \
-          (pos, len(objects))
+      raise RuntimeError("Grid request for job %d on a setup with %d jobs" % \
+          (pos, len(objects)))
     objects = [objects[pos]]
 
   basedir = 'debug'
 
   for obj in objects:
-    print "Creating debug data for `%s'..." % obj.make_path()
+    print("Creating debug data for `%s'..." % obj.make_path())
     try:
-      print "Annotating heart-rate `%s'" % output
+      print("Annotating heart-rate `%s'" % output)
       output = obj.make_path(args.output_directory, '.pdf')
       utils.explain_heartrate(obj, args.directory, output)
 
     except IOError as e:
-      print "Skipping `%s': %s" % (obj.stem, str(e))
+      print("Skipping `%s': %s" % (obj.stem, str(e)))
       continue
 
     finally:
@@ -185,7 +183,7 @@ def write_kpts_and_hr(args):
   """Refactor metadata with DMRF and HR only"""
   from . import Database
   db = Database()
-  
+
   basedir = pkg_resources.resource_filename(__name__, 'new-data')
 
   objects = db.objects()
@@ -193,13 +191,13 @@ def write_kpts_and_hr(args):
   for obj in objects:
     kpts = obj.load_drmf_keypoints()
     hr = obj.load_heart_rate_in_bpm()
-    
+
     output = obj.make_path(basedir, '.hdf5')
     if os.path.exists(output) and not args.force:
-      print "Skipping `%s' (meta file exists)" % obj.make_path()
+      print("Skipping `%s' (meta file exists)" % obj.make_path())
       continue
     try:
-      print "Refactoring meta data for `%s'..." % obj.make_path()
+      print("Refactoring meta data for `%s'..." % obj.make_path())
       if kpts[0,0] and hr:
         outdir = os.path.dirname(output)
         if not os.path.exists(outdir): os.makedirs(outdir)
@@ -209,13 +207,14 @@ def write_kpts_and_hr(args):
         h5.set_attribute('units', 'beats-per-minute', 'heartrate')
         h5.close()
       else:
-        print "Skipping `%s': Missing keypoints and/or Heart-rate" % (obj.stem,)
-        print " -> Keypoints: %s" % bb
-        print " -> Heart-rate  : %s" % hr
+        print("Skipping `%s': Missing keypoints and/or Heart-rate" % \
+            (obj.stem,))
+        print(" -> Keypoints: %s" % bb)
+        print(" -> Heart-rate  : %s" % hr)
     except IOError as e:
-      print "Skipping `%s': %s" % (obj.stem, str(e))
+      print("Skipping `%s': %s" % (obj.stem, str(e)))
       continue
-  
+
   return 0
 
 class Interface(BaseInterface):
@@ -282,4 +281,3 @@ class Interface(BaseInterface):
     meta_message = write_kpts_and_hr.__doc__
     meta_parser = subparsers.add_parser('write-kpts-hr', help=write_kpts_and_hr.__doc__)
     meta_parser.set_defaults(func=write_kpts_and_hr) #action
-
