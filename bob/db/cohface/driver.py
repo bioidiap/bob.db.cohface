@@ -44,6 +44,12 @@ def dumplist(args):
 def create_meta(args):
   """Runs the face detection, heart-rate estimation, save outputs at package"""
 
+  if not args.force:
+    raise RuntimeError("This method will re-write the internal HDF5 files, " \
+        "which contain vital metadata used for generating results." \
+        " Make sure this is what you want to do reading the API for this " \
+        "package first (special attention to the method " \
+        ":py:meth:`File.run_face_detector`).")
 
   from . import Database
   db = Database()
@@ -83,14 +89,13 @@ def create_meta(args):
       if bb and hr:
         outdir = os.path.dirname(output)
         if not os.path.exists(outdir): os.makedirs(outdir)
-        h5 = bob.io.base.HDF5File(output, 'w')
+        h5 = bob.io.base.HDF5File(output, 'a')
         h5.create_group('face_detector')
         h5.cd('face_detector')
-        h5.set('topleft_x', bb.topleft.x)
-        h5.set('topleft_y', bb.topleft.y)
-        h5.set('width', bb.size.x)
-        h5.set('height', bb.size.y)
-        h5.set_attribute('quality', bb.quality)
+        h5.set('topleft_x', bb.topleft[1])
+        h5.set('topleft_y', bb.topleft[0])
+        h5.set('width', bb.size[1])
+        h5.set('height', bb.size[0])
         h5.cd('..')
         h5.set('heartrate', hr)
         h5.set_attribute('units', 'beats-per-minute', 'heartrate')

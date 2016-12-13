@@ -99,15 +99,59 @@ class File(bob.db.base.File):
     return bob.io.video.reader(path)
 
 
+  def run_face_detector(self, directory, max_frames=0):
+    """Runs bob.ip.facedetect stock detector on the selected frames.
+
+    .. warning::
+
+       This method is deprecated and serves only as a development basis to
+       clean-up the :py:meth:`load_face_detection`, which for now relies on
+       text files shipped with the database. Technically, the output of this
+       method and the detected faces shipped should be the same as of today,
+       13 december 2016.
+
+
+    Parameters:
+
+      directory (str): A directory name that leads to the location the database
+        is installed on the local disk
+
+      max_frames (int): If set, delimits the maximum number of frames to treat
+        from the associated video file.
+
+
+    Returns:
+
+      dict: A dictionary where the key is the frame number and the values are
+      instances of :py:class:`bob.ip.facedetect.BoundingBox`.
+
+
+    """
+
+    detections = {}
+    data = self.load_video(directory)
+    if max_frames: data = data[:max_frames]
+    for k, frame in enumerate(data):
+      bb, quality = bob.ip.facedetect.detect_single_face(frame)
+      detections[k] = bb
+    return detections
+
+
   def load_face_detection(self, directory):
     """Load bounding boxes for this file
 
     This function loads bounding boxes for each frame of a video sequence.
+    Bounding boxes are loaded from the database directory and are the ones
+    provided with it. Bounding boxes generated from
+    :py:meth:`load_face_detection` (which should be exactly the same) are not
+    used by this method.
+
 
     Parameters:
 
       directory (str): A directory name that will be prefixed to the returned
         result.
+
 
     Returns:
 
@@ -132,11 +176,10 @@ class File(bob.db.base.File):
   def estimate_heartrate_in_bpm(self, directory):
     """Estimates the person's heart rate using the ECG sensor data
 
-    Keyword parameters:
+    Parameters:
 
-      directory
-        A directory name that leads to the location the database is installed
-        on the local disk
+      directory (str): A directory name that leads to the location the database
+        is installed on the local disk
 
     """
 
