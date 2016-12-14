@@ -77,7 +77,12 @@ class File(bob.db.base.File):
 
     """
 
-    return bob.io.base.load(self.make_path(directory, extension))
+    path = self.make_path(directory, extension)
+
+    if not os.path.exists(path):
+      raise IOError("Video file `%s' is not available - have you downloaded the database raw files from the original site?" % (path,))
+
+    return bob.io.base.load(path)
 
 
   def load_video(self, directory):
@@ -96,6 +101,10 @@ class File(bob.db.base.File):
     """
 
     path = os.path.join(directory, self.path + '.avi')
+
+    if not os.path.exists(path):
+      raise IOError("Video file `%s' is not available - have you downloaded the database raw files from the original site?" % (path,))
+
     return bob.io.video.reader(path)
 
 
@@ -160,15 +169,20 @@ class File(bob.db.base.File):
 
     """
 
+    basedir = os.path.join('data', 'bbox')
+    data_dir = pkg_resources.resource_filename(__name__, basedir)
+    path = self.make_path(data_dir, '.face')
+
+    if not os.path.exists(path):
+      raise IOError("Face bounding-box file `%s' is not available - have you run the metadata generation step or `./bin/bob_dbmanage.py cohface download'?" % (path,))
+
     retval = {}
-
-    path = os.path.join(directory, 'bounding-boxes', self.path + '.face')
-
     with open(path, 'rt') as f:
       for row in f:
         if not row.strip(): continue
         p = row.split()
-        # top left (y, x), size (height, width)
+        # .face file: <frame> <x> <y> <width> <height>
+        # BoundingBox ctor: top left (y, x), size (height, width)
         retval[int(p[0])] = bob.ip.facedetect.BoundingBox((float(p[2]), float(p[1])), (float(p[4]), float(p[3])))
     return retval
 
@@ -199,6 +213,9 @@ class File(bob.db.base.File):
     data_dir = pkg_resources.resource_filename(__name__, 'data')
     path = self.make_path(data_dir, '.hdf5')
 
+    if not os.path.exists(path):
+      raise IOError("Metadata file `%s' is not available - have you run the metadata generation step or `./bin/bob_dbmanage.py cohface download'?" % (path,))
+
     if os.path.exists(path):
       f = bob.io.base.HDF5File(path)
       return f.get('heartrate')
@@ -225,6 +242,9 @@ class File(bob.db.base.File):
 
     data_dir = pkg_resources.resource_filename(__name__, 'data')
     path = self.make_path(data_dir, '.hdf5')
+
+    if not os.path.exists(path):
+      raise IOError("Metadata file `%s' is not available - have you run the metadata generation step or `./bin/bob_dbmanage.py cohface download'?" % (path,))
 
     if os.path.exists(path):
       f = bob.io.base.HDF5File(path)

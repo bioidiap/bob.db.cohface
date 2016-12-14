@@ -264,7 +264,9 @@ def upload(arguments):
   # compress
   import tarfile
   f = tarfile.open(target_file, 'w:bz2')
-  for n,p in zip(names, paths): f.add(p, n)
+  for k,(n,p) in enumerate(zip(names, paths)):
+    print("+ [%d/%d] %s" % (k+1, len(names), n))
+    f.add(p, n)
   f.close()
 
   # set permissions for sane Idiap storage
