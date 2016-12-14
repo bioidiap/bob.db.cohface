@@ -1,3 +1,2 @@
 include README.rst bootstrap-buildout.py buildout.cfg develop.cfg LICENSE version.txt requirements.txt
-recursive-include bob/db/cohface *.txt
-recursive-include bob/db/cohface/data *.hdf5
+recursive-include bob/db/cohface *.hdf5 *.face *.txt

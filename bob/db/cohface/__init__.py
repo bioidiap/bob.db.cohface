@@ -48,25 +48,27 @@ class Database(object):
     """
     files = []
 
+    proto_basedir = os.path.join('data', 'protocols')
+
     # clean protocol -> face is illuminated with a spot
     if protocol in ('clean'):
 
       if not subset:
-        d = resource_filename(__name__, os.path.join('protocols/clean', 'all.txt'))
+        d = resource_filename(__name__, os.path.join(proto_basedir, 'clean', 'all.txt'))
         with open(d, 'rt') as f: sessions = f.read().split()
         files += [File(k) for k in self.metadata if k in sessions]
         return files
       else:
         if 'train' in subset:
-          d = resource_filename(__name__, os.path.join('protocols/clean', 'train.txt'))
+          d = resource_filename(__name__, os.path.join(proto_basedir, 'clean', 'train.txt'))
           with open(d, 'rt') as f: sessions = f.read().split()
           files += [File(k) for k in self.metadata if k in sessions]
         if 'dev' in subset:
-          d = resource_filename(__name__, os.path.join('protocols/clean', 'dev.txt'))
+          d = resource_filename(__name__, os.path.join(proto_basedir, 'clean', 'dev.txt'))
           with open(d, 'rt') as f: sessions = f.read().split()
           files += [File(k) for k in self.metadata if k in sessions]
         if 'test' in subset:
-          d = resource_filename(__name__, os.path.join('protocols/clean', 'test.txt'))
+          d = resource_filename(__name__, os.path.join(proto_basedir, 'clean', 'test.txt'))
           with open(d, 'rt') as f: sessions = f.read().split()
           files += [File(k) for k in self.metadata if k in sessions]
 
@@ -76,21 +78,21 @@ class Database(object):
     if protocol in ('natural'):
 
       if not subset:
-        d = resource_filename(__name__, os.path.join('protocols/natural', 'all.txt'))
+        d = resource_filename(__name__, os.path.join(proto_basedir, 'natural', 'all.txt'))
         with open(d, 'rt') as f: sessions = f.read().split()
         files += [File(k) for k in self.metadata if k in sessions]
         return files
       else:
         if 'train' in subset:
-          d = resource_filename(__name__, os.path.join('protocols/natural', 'train.txt'))
+          d = resource_filename(__name__, os.path.join(proto_basedir, 'natural', 'train.txt'))
           with open(d, 'rt') as f: sessions = f.read().split()
           files += [File(k) for k in self.metadata if k in sessions]
         if 'dev' in subset:
-          d = resource_filename(__name__, os.path.join('protocols/natural', 'dev.txt'))
+          d = resource_filename(__name__, os.path.join(proto_basedir, 'natural', 'dev.txt'))
           with open(d, 'rt') as f: sessions = f.read().split()
           files += [File(k) for k in self.metadata if k in sessions]
         if 'test' in subset:
-          d = resource_filename(__name__, os.path.join('protocols/natural', 'test.txt'))
+          d = resource_filename(__name__, os.path.join(proto_basedir, 'natural', 'test.txt'))
           with open(d, 'rt') as f: sessions = f.read().split()
           files += [File(k) for k in self.metadata if k in sessions]
 
@@ -101,21 +103,21 @@ class Database(object):
     if protocol in ('all'):
 
       if not subset:
-        d = resource_filename(__name__, os.path.join('protocols/all', 'all.txt'))
+        d = resource_filename(__name__, os.path.join(proto_basedir, 'all', 'all.txt'))
         with open(d, 'rt') as f: sessions = f.read().split()
         files += [File(k) for k in self.metadata if k in sessions]
         return files
       else:
         if 'train' in subset:
-          d = resource_filename(__name__, os.path.join('protocols/all', 'train.txt'))
+          d = resource_filename(__name__, os.path.join(proto_basedir, 'all', 'train.txt'))
           with open(d, 'rt') as f: sessions = f.read().split()
           files += [File(k) for k in self.metadata if k in sessions]
         if 'dev' in subset:
-          d = resource_filename(__name__, os.path.join('protocols/all', 'dev.txt'))
+          d = resource_filename(__name__, os.path.join(proto_basedir, 'all', 'dev.txt'))
           with open(d, 'rt') as f: sessions = f.read().split()
           files += [File(k) for k in self.metadata if k in sessions]
         if 'test' in subset:
-          d = resource_filename(__name__, os.path.join('protocols/all', 'test.txt'))
+          d = resource_filename(__name__, os.path.join(proto_basedir, 'all', 'test.txt'))
           with open(d, 'rt') as f: sessions = f.read().split()
           files += [File(k) for k in self.metadata if k in sessions]
 
