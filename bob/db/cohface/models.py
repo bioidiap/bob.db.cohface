@@ -150,16 +150,9 @@ class File(bob.db.base.File):
     """Load bounding boxes for this file
 
     This function loads bounding boxes for each frame of a video sequence.
-    Bounding boxes are loaded from the database directory and are the ones
-    provided with it. Bounding boxes generated from
-    :py:meth:`run_face_detector` (which should be exactly the same) are not
-    used by this method.
-
-
-    Parameters:
-
-      directory (str): A directory name that will be prefixed to the returned
-        result.
+    Bounding boxes are loaded from the package base directory and are the ones
+    provided with it. These bounding boxes were generated from
+    :py:meth:`run_face_detector` over the whole dataset.
 
 
     Returns:
