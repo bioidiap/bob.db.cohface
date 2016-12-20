@@ -28,7 +28,7 @@ stages:
     - ./_ci/install.sh _ci #updates
     - ./_ci/before_build.sh
   script:
-    - ./_ci/build.sh cohface
+    - ./_ci/build.sh
   after_script:
     - ./_ci/after_build.sh
   artifacts:
@@ -98,7 +98,7 @@ stages:
     - branches
   before_script:
     - ./_ci/install.sh _ci #updates
-    - ./_ci/before_deploy.sh cohface
+    - ./_ci/before_deploy.sh
   script:
     - ./_ci/deploy.sh
   after_script:
