@@ -146,7 +146,7 @@ class File(bob.db.base.File):
     return detections
 
 
-  def load_face_detection(self, directory):
+  def load_face_detection(self):
     """Load bounding boxes for this file
 
     This function loads bounding boxes for each frame of a video sequence.
