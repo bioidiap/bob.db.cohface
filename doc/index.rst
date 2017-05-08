@@ -31,7 +31,7 @@ The annotation procedure can be launched with the following command:
 
 .. code-block:: sh
 
-   $ ./bin/bob_dbmanage.py cohface mkmeta
+   $ bob_dbmanage.py cohface mkmeta
 
 
 Each video, which is composed of a significant number of frames (hundreds),
@@ -40,7 +40,7 @@ launch the job on the SGE queue using the following command-line:
 
 .. code-block:: sh
 
-   $ ./bin/jman sub -q q1d --io-big -t 160 `pwd`/bin/bob_dbmanage.py cohface mkmeta
+   $ jman sub -q q1d --io-big -t 160 `pwd`bob_dbmanage.py cohface mkmeta
 
 
 API
