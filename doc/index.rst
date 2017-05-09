@@ -40,7 +40,7 @@ launch the job on the SGE queue using the following command-line:
 
 .. code-block:: sh
 
-   $ jman sub -q q1d --io-big -t 160 `pwd`bob_dbmanage.py cohface mkmeta
+   $ jman sub -q q1d --io-big -t 160 `which bob_dbmanage.py` cohface mkmeta
 
 
 API
