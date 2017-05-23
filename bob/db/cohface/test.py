@@ -103,7 +103,7 @@ class CohfaceTest(unittest.TestCase):
 
     for obj in self.db.objects()[:3]:
 
-      detection = obj.load_face_detection(DATABASE_LOCATION)
+      detection = obj.load_face_detection()
       assert detection
 
       hr = obj.load_heart_rate_in_bpm()
