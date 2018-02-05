@@ -19,3 +19,4 @@ build
 src/
 logs/
 bob/db/cohface/data/
+record.txt
