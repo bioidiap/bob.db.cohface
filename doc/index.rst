@@ -1,6 +1,7 @@
 .. vim: set fileencoding=utf-8 :
 
 .. _bob.db.cohface:
+
 ==================
  COHFACE Database
 ==================
